@@ -1,0 +1,36 @@
+import pandas as pd
+df=pd.read_csv("flavors_of_cacao.csv")
+df
+df.head(6)
+df.columns
+df.columns =['Company', 'Specific Bean Origin',
+       'REF', 'ReviewDate', 'CocoaPercent', 'CompanyLocation', 'Rating',
+       'BeanType', 'BroadBeanOrigin']
+len(df)
+len(df.Company.unique())
+df.groupby(["ReviewDate"]).count()
+df[df.ReviewDate == 2013]
+df[df.BeanType=='\xa0']
+import matplotlib.pyplot as plt
+ratings = df.Rating.values
+plt.figure(figsize = (16,5))
+plt.hist(ratings, bin = 4, color="red")
+plt.xlabel("Ratings")
+df["CocoaPercent"]= df["CocoaPercent"].str.replace(r'\D',"").astype(int)
+import matplotlib.pyplot as plt
+percent = df.CocoaPercent.values
+plt.figure(figsize = (16,5))
+plt.scatter(percent, ratings, color="red")
+plt.xlabel("Cocoa Percent")
+from sklearn.preprocessing import StandardScaler
+
+scaler = StandardScaler()
+
+x =df.iloc[:,6:7].values
+x_normalized =scaler.fit_transform(x)
+x_normalized
+df.groupby("Company")["Rating"].agg(["mean"]).sort_values(by = "mean", ascending =False)
+from sklearn.preprocessing import OrdinalEncoder
+enc =OrdinalEncoder()
+df[["Company", "CompanyLocation"]]=enc.fit_transform(df[["Company", "CompanyLocation"]])
+df
